@@ -4,7 +4,7 @@ import sys
 
 
 def main(**kwargs):
-    # get configuration variables
+    # get configuration path_to_file variable
     path_to_file = kwargs.get("path_to_file")
     if path_to_file is None:
         path_to_file = sys.argv[1]

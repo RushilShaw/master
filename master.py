@@ -6,7 +6,7 @@ import json
 
 
 def main():
-    command_line_arguments = sys.argv
+    command_line_arguments = sys.argv[1:]
     command_line_arguments_combined = "".join(command_line_arguments)
     configuration_variables = json.loads(command_line_arguments_combined)
 
