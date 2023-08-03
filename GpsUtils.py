@@ -27,9 +27,15 @@ class ClawGPSSimulator:
         ):
             time.sleep(self.PORT_INITIALIZATION_DELAY_SECONDS)
             for line in file.readlines():
+                ser.flushInput()
                 encoded_command = f"{line.strip()}\r".encode()
                 ser.write(encoded_command)
-                time.sleep(stream_delay_seconds)
+                full_response = ""
+                while not full_response.endswith("\r"):
+                    bytes_to_read = ser.inWaiting()
+                    response_encoded = ser.read(bytes_to_read)
+                    response_decoded = response_encoded.decode()
+                    full_response += response_decoded
 
     def stream_list_of_commands(self, commands: list[str],  *, stream_delay_seconds=0.5):
         with self.PORT as ser:
@@ -37,9 +43,7 @@ class ClawGPSSimulator:
             for command in commands:
                 encoded_command = f"{command}\r".encode()
                 ser.write(encoded_command)
-                while ser.inWaiting() != len(encoded_command):
-                    response_encoded = ser.read(ser.inWaiting())
-                    print(response_encoded)
+                time.sleep(stream_delay_seconds)
 
     def send_command(self, command: str):
         with self.PORT as ser:
