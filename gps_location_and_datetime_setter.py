@@ -44,10 +44,8 @@ def generate_commands(new_location: list[float, float, float], new_datetime_iso_
         new_datetime = datetime.fromisoformat(new_datetime_iso_8601)
 
     gps_commands = [
-        "SIM:MODE MANUAL",
         "SIM:POS:MODE FIXED",
         "SIM:TIME:MODE ASSIGN",
-        "SIM:COM START",
         "OUT:POW -110",
         f"SIMulation:TIME:START:TIME {new_datetime.hour},{new_datetime.minute},{new_datetime.second}",
         f"SIMulation:TIME:START:DATE {new_datetime.year},{new_datetime.month},{new_datetime.day}",

@@ -37,7 +37,9 @@ class ClawGPSSimulator:
             for command in commands:
                 encoded_command = f"{command}\r".encode()
                 ser.write(encoded_command)
-                time.sleep(stream_delay_seconds)
+                while ser.inWaiting() != len(encoded_command):
+                    response_encoded = ser.read(ser.inWaiting())
+                    print(response_encoded)
 
     def send_command(self, command: str):
         with self.PORT as ser:
