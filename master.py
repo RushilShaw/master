@@ -1,4 +1,3 @@
-import os
 import sys
 import json
 import gps_starter
@@ -15,18 +14,16 @@ def main():
         "stop": gps_stopper
     }
 
-    command_line_json_arguments = sys.argv[1]
-    configuration_variables = json.loads(command_line_json_arguments)
+    try:
+        command_line_json_arguments = sys.argv[1]
+        configuration_variables = json.loads(command_line_json_arguments)
+        command = configuration_variables["command"]
+        script = command_to_script[command]
+        return_code = script.main(**configuration_variables)
+        print(return_code)
 
-    command = configuration_variables.get("command")
-
-    if command is None:
+    except:
         print("PY_FATAL_EXCEPTION")
-        return
-
-    script = command_to_script[command]
-    return_code = script.main(**configuration_variables)
-    print(return_code)
 
 
 if __name__ == '__main__':

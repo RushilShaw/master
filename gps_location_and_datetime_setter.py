@@ -38,8 +38,6 @@ def main(**kwargs):
         kwargs["LATITUDE_DEGREES"],
         kwargs["ALTITUDE_METERS"]
     )
-    if "DATETIME_ISO_8601" in kwargs:
-        commands += generate_datetime_commands(kwargs["DATETIME_ISO_8601"])
 
     gps.stream_list_of_commands(commands)
 

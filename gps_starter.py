@@ -5,7 +5,8 @@ import gps_location_and_datetime_setter
 
 def main(**kwargs):
     gps = GpsUtils.ClawGPSSimulator()
-    datetime_commands = gps_location_and_datetime_setter.generate_datetime_commands(kwargs.get("NEW_DATETIME_ISO_8601"))
+    new_datetime = kwargs.get("NEW_DATETIME_ISO_8601")
+    datetime_commands = gps_location_and_datetime_setter.generate_datetime_commands(new_datetime)
 
     gps.stream_list_of_commands(datetime_commands)
 
@@ -25,4 +26,4 @@ def main(**kwargs):
 
 
 if __name__ == '__main__':
-    main(NEW_DATETIME_ISO_8601=sys.argv[1])
+    main(NEW_DATETIME_ISO_8601=sys.argv[1] if len(sys.argv) == 2 else None)
