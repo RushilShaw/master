@@ -66,4 +66,4 @@ class ClawGPSSimulator:
                 response = ser.read(bytes_to_read)
                 full_response += response
                 time.sleep(0.01)
-        return full_response[:-7]
+        return full_response[len(encoded_command)+1:-9]

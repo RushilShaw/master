@@ -1,4 +1,5 @@
 import sys
+import time
 import GpsUtils
 import gps_location_and_datetime_setter
 
@@ -10,19 +11,15 @@ def main(**kwargs):
 
     gps.stream_list_of_commands(datetime_commands)
 
-    current_state = gps.send_command("SIM:COM STATE?")
-    if current_state == "RUNNING":
-        return "PY_SUCCESS"
-
     gps.send_command("SIM:COM START")
 
-    if current_state == "STARTING":
-        current_state = gps.send_command("SIM:COM STATE?")
+    for _ in range(10):
+        current_state = gps.send_command("SIM:STATE?")
+        if current_state == b"RUNNING":
+            return "PY_SUCCESS"
+        time.sleep(1)
 
-    if current_state == "RUNNING":
-        return "PY_SUCCESS"
-    else:
-        return "PY_FATAL_EXCEPTION"
+    return "PY_FATAL_EXCEPTION"
 
 
 if __name__ == '__main__':
