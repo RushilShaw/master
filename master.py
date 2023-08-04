@@ -1,33 +1,32 @@
-import sys, os
+import os
+import sys
 import json
-import GpsUtils
-import stream_file
+import gps_starter
+import gps_stopper
+import load_simulation_commands
 import gps_location_and_datetime_setter
 
 
 def main():
-    command_line_arguments = sys.argv[1:]
-    command_line_arguments_combined = "".join(command_line_arguments)
-    configuration_variables = json.loads(command_line_arguments_combined)
+    command_to_script = {
+        "motion": load_simulation_commands,
+        "fixed": gps_location_and_datetime_setter,
+        "start": gps_starter,
+        "stop": gps_stopper
+    }
 
-    if configuration_variables.get("command") is None:
-        sys.exit(os.EX_CONFIG)
+    command_line_json_arguments = sys.argv[1]
+    configuration_variables = json.loads(command_line_json_arguments)
 
-    command = configuration_variables["command"]
+    command = configuration_variables.get("command")
 
-    if command == "motion":
-        stream_file.main(**configuration_variables)
+    if command is None:
+        print("PY_FATAL_EXCEPTION")
+        return
 
-    elif command == "fixed":
-        gps_location_and_datetime_setter.main(**configuration_variables)
-
-    elif command == "start":
-        gps = GpsUtils.ClawGPSSimulator()
-        gps.send_command("SIM:COM START")
-
-    elif command == "stop":
-        gps = GpsUtils.ClawGPSSimulator()
-        gps.send_command("SIM:COM STOP")
+    script = command_to_script[command]
+    return_code = script.main(**configuration_variables)
+    print(return_code)
 
 
 if __name__ == '__main__':

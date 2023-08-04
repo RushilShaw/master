@@ -6,8 +6,6 @@ import sys
 def main(**kwargs):
     # get configuration path_to_file variable
     path_to_file = kwargs.get("path_to_file")
-    if path_to_file is None:
-        path_to_file = sys.argv[1]
 
     # list all functions that will be sent to GPS
     initialization_commands = [
@@ -18,7 +16,6 @@ def main(**kwargs):
     final_commands = [
         "SIM:POS:MOTION:READ 1",
         "SIM:POS:MODE MOTION",
-        "SIM:COM START"
     ]
 
     # initialize GPS instance
@@ -29,6 +26,8 @@ def main(**kwargs):
     gps.stream_file(command_file)
     gps.stream_list_of_commands(final_commands)
 
+    return "PY_SUCCESS"
+
 
 if __name__ == '__main__':
-    main()
+    main(path_to_file=sys.argv[1])
