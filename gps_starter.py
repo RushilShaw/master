@@ -15,7 +15,7 @@ def main(**kwargs):
 
     for _ in range(10):
         current_state = gps.send_command("SIM:STATE?")
-        if current_state == b"RUNNING":
+        if current_state == b"RUNNING\r\n":
             return "PY_SUCCESS"
         time.sleep(1)
 

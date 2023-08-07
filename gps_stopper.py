@@ -10,7 +10,7 @@ def main(**kwargs):
 
     for _ in range(10):
         current_state = gps.send_command("SIM:STATE?")
-        if current_state == b"STOPPED":
+        if current_state == b"STOPPED\r\n":
             return "PY_SUCCESS"
         time.sleep(1.0)
 
