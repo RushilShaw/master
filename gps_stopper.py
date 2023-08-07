@@ -1,5 +1,4 @@
 import time
-
 import GpsUtils
 
 
@@ -12,7 +11,7 @@ def main(**kwargs):
         current_state = gps.send_command("SIM:STATE?")
         if current_state == b"STOPPED\r\n":
             return "PY_SUCCESS"
-        time.sleep(1.0)
+        time.sleep(0.5)
 
     return "PY_FATAL_EXCEPTION"
 

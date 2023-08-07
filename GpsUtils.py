@@ -8,7 +8,7 @@ class ClawGPSSimulator:
     GPS_DEVICE_NAME = "Silicon Labs CP210x USB to UART Bridge"
     BAUD = 115200
     PORT: serial.Serial
-    PORT_INITIALIZATION_DELAY_SECONDS = 1.0
+    PORT_INITIALIZATION_DELAY_SECONDS = 0.5
 
     def __init__(self, port_name=None):
         if port_name is None:
@@ -30,41 +30,22 @@ class ClawGPSSimulator:
             for line in file.readlines():
                 encoded_command = f"{line.strip()}\r".encode()
                 ser.write(encoded_command)
-                full_response = b""
-                while not full_response.endswith(b"scpi > "):
-                    bytes_to_read = ser.inWaiting()
-                    response = ser.read(bytes_to_read)
-                    full_response += response
-                    time.sleep(0.01)
-                if full_response.endswith(b"Command Error\r\nscpi > "):
-                    raise ValueError(f"{line.strip()} -> caused an SCPI Error")
+                ser.read_until(b"scpi > ")
 
     def stream_list_of_commands(self, commands: list[str]):
         with self.PORT as ser:
             time.sleep(self.PORT_INITIALIZATION_DELAY_SECONDS)
             ser.flushInput()
             for command in commands:
-                encoded_command = f"{command}\r".encode()
+                encoded_command = f"{command.strip()}\r".encode()
                 ser.write(encoded_command)
-                full_response = b""
-                while not full_response.endswith(b"scpi > "):
-                    bytes_to_read = ser.inWaiting()
-                    response = ser.read(bytes_to_read)
-                    full_response += response
-                    time.sleep(0.01)
-                if full_response.endswith(b"Command Error\r\nscpi > "):
-                    raise ValueError(f"{command} -> caused an SCPI Error")
+                ser.read_until(b"scpi > ")
 
     def send_command(self, command: str) -> bytes:
         with self.PORT as ser:
             time.sleep(self.PORT_INITIALIZATION_DELAY_SECONDS)
             ser.flushInput()
-            encoded_command = f"{command}\r".encode()
+            encoded_command = f"{command.strip()}\r".encode()
             ser.write(encoded_command)
-            full_response = b""
-            while not full_response.endswith(b"scpi > "):
-                bytes_to_read = ser.inWaiting()
-                response = ser.read(bytes_to_read)
-                full_response += response
-                time.sleep(0.01)
-        return full_response[len(encoded_command)+1:-7]
+            response = ser.read_until(b"scpi > ")
+        return response[len(encoded_command)+1:-7]

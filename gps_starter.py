@@ -1,6 +1,7 @@
 import sys
 import time
 import GpsUtils
+import gps_stopper
 import gps_location_and_datetime_setter
 
 
@@ -8,6 +9,10 @@ def main(**kwargs):
     gps = GpsUtils.ClawGPSSimulator()
     new_datetime = kwargs.get("NEW_DATETIME_ISO_8601")
     datetime_commands = gps_location_and_datetime_setter.generate_datetime_commands(new_datetime)
+
+    stopper_result = gps_stopper.main()
+    if stopper_result != "PY_SUCCESS":
+        return "PY_FATAL_EXCEPTION"
 
     gps.stream_list_of_commands(datetime_commands)
 
@@ -17,7 +22,7 @@ def main(**kwargs):
         current_state = gps.send_command("SIM:STATE?")
         if current_state == b"RUNNING\r\n":
             return "PY_SUCCESS"
-        time.sleep(1)
+        time.sleep(0.5)
 
     return "PY_FATAL_EXCEPTION"
 

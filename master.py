@@ -21,8 +21,10 @@ def main():
         script = command_to_script[command]
         return_code = script.main(**configuration_variables)
         print(return_code)
+
     except:
         print("PY_FATAL_EXCEPTION")
+        # raise
 
 
 if __name__ == '__main__':

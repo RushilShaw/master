@@ -23,7 +23,7 @@ def generate_datetime_commands(new_datetime_iso_8601: str) -> list[str]:
         new_datetime = datetime.fromisoformat(new_datetime_iso_8601)
 
     gps_commands = [
-        "SIM:TIME:MODE ASSIGN"
+        "SIM:TIME:MODE ASSIGN",
         f"SIMulation:TIME:START:TIME {new_datetime.hour},{new_datetime.minute},{new_datetime.second}",
         f"SIMulation:TIME:START:DATE {new_datetime.year},{new_datetime.month},{new_datetime.day}"
     ]
@@ -38,6 +38,7 @@ def main(**kwargs):
         kwargs["LATITUDE_DEGREES"],
         kwargs["ALTITUDE_METERS"]
     )
+    commands.append("SIM:POS:MODE FIXED")
 
     gps.stream_list_of_commands(commands)
 
