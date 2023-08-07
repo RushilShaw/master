@@ -1,13 +1,30 @@
 import sys
 import time
 import GpsUtils
-import gps_location_and_datetime_setter
+from datetime import datetime, timezone
+
+
+def generate_datetime_commands(new_datetime_iso_8601: str) -> list[str]:
+    """
+    generate_datetime_commands func: creates a list of the commands needed to set the new datetime on the CLAW GPS
+    """
+    if new_datetime_iso_8601 is None:
+        new_datetime = datetime.now(timezone.utc)
+    else:
+        new_datetime = datetime.fromisoformat(new_datetime_iso_8601)
+
+    gps_commands = [
+        "SIM:TIME:MODE ASSIGN",
+        f"SIMulation:TIME:START:TIME {new_datetime.hour},{new_datetime.minute},{new_datetime.second}",
+        f"SIMulation:TIME:START:DATE {new_datetime.year},{new_datetime.month},{new_datetime.day}"
+    ]
+    return gps_commands
 
 
 def main(**kwargs):
     gps = GpsUtils.ClawGPSSimulator()
     new_datetime = kwargs.get("NEW_DATETIME_ISO_8601")
-    datetime_commands = gps_location_and_datetime_setter.generate_datetime_commands(new_datetime)
+    datetime_commands = generate_datetime_commands(new_datetime)
 
     gps.send_command("SIM:COM STOP")
 

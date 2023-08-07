@@ -2,14 +2,14 @@ import sys
 import json
 import gps_starter
 import gps_stopper
+import gps_location_setter
 import load_simulation_commands
-import gps_location_and_datetime_setter
 
 
 def main():
     command_to_script = {
         "motion": load_simulation_commands,
-        "fixed": gps_location_and_datetime_setter,
+        "fixed": gps_location_setter,
         "start": gps_starter,
         "stop": gps_stopper
     }
