@@ -21,13 +21,9 @@ def main(**kwargs):
         kwargs["ALTITUDE_METERS"]
     )
 
-    commands = [
-        "SIM:COM STOP"
-    ]
-    commands.extend(location_commands)
-    commands.append("SIM:POS:MODE FIXED")
-
-    gps.stream_list_of_commands(commands)
+    gps.send_command("SIM:COM STOP")
+    gps.stream_list_of_commands(location_commands)
+    gps.send_command("SIM:POS:MODE FIXED")
 
     return "PY_SUCCESS"
 

@@ -20,9 +20,9 @@ class ClawGPSSimulator:
             if port.description.startswith(self.GPS_DEVICE_NAME):
                 return port.name
 
-    def stream_file(self, command_filepath: pathlib.Path):
+    def stream_file(self, commands_filepath: pathlib.Path):
         with (
-            open(command_filepath, 'r') as file,
+            open(commands_filepath, 'r') as file,
             self.PORT as ser
         ):
             time.sleep(self.PORT_INITIALIZATION_DELAY_SECONDS)
