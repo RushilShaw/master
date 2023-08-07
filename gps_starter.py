@@ -1,7 +1,6 @@
 import sys
 import time
 import GpsUtils
-import gps_stopper
 import gps_location_and_datetime_setter
 
 
@@ -10,9 +9,7 @@ def main(**kwargs):
     new_datetime = kwargs.get("NEW_DATETIME_ISO_8601")
     datetime_commands = gps_location_and_datetime_setter.generate_datetime_commands(new_datetime)
 
-    stopper_result = gps_stopper.main()
-    if stopper_result != "PY_SUCCESS":
-        return "PY_FATAL_EXCEPTION"
+    gps.send_command("SIM:COM STOP")
 
     gps.stream_list_of_commands(datetime_commands)
 
