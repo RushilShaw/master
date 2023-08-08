@@ -23,7 +23,7 @@ def generate_datetime_commands(new_datetime_iso_8601: str) -> list[str]:
 
 def main(**kwargs):
     gps = GpsUtils.ClawGPSSimulator()
-    new_datetime = kwargs.get("NEW_DATETIME_ISO_8601")
+    new_datetime = kwargs.get("New_datetime_iso_8601")
     datetime_commands = generate_datetime_commands(new_datetime)
 
     gps.send_command("SIM:COM STOP")
@@ -42,4 +42,4 @@ def main(**kwargs):
 
 
 if __name__ == '__main__':
-    main(NEW_DATETIME_ISO_8601=sys.argv[1] if len(sys.argv) == 2 else None)
+    main(New_datetime_iso_8601=sys.argv[1] if len(sys.argv) == 2 else None)
